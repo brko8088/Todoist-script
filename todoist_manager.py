@@ -28,7 +28,8 @@ def generate_project_data_from_todoist(token, project_data):
 
     for project_Object in raw_project_data:
         project_data.append(project_object.Project(project_Object))
-        return project_data
+
+    return project_data
 
 
 def generate_section_data_from_todoist(token, project_Id, sections_data):
@@ -36,7 +37,8 @@ def generate_section_data_from_todoist(token, project_Id, sections_data):
 
     for section_Object in raw_section_data:
         sections_data.append(section_object.Section(section_Object))
-        return sections_data
+
+    return sections_data
 
 
 def generate_task_data_from_todoist(token, project_Id, task_data):
@@ -44,4 +46,5 @@ def generate_task_data_from_todoist(token, project_Id, task_data):
 
     for task_Object in raw_tasks_data:
         task_data.append(task_object.Task(task_Object))
-        return task_data
+
+    return task_data
