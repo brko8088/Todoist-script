@@ -1,12 +1,12 @@
 import todoist_manager
-import requests
 import file_manager
+import datetime_handler
 import datetime
 import json
-import uuid
 import sys
+import os
 
-VERBOSE = False;
+VERBOSE = False
 
 
 class App:
@@ -35,59 +35,32 @@ def get_tasks_for_today(tasks):
     return tasks_for_the_day
 
 
-def get_processed_datetime(date_time, shift_value):
-    print(date_time)
-    print(shift_value)
+def shift(user_input_shift_value):
+    tasks_for_today = get_tasks_for_today(mainApp.all_current_tasks)
 
-    # Splitting Date Formats
-    time_to_process = date_time[11:-1].split(":")
-    print(time_to_process)
-
-    time_to_add = shift_value[1:].split(":")
-    print(time_to_add)
-
-    hours_time_to_add = int(time_to_process[0]) + int(time_to_add[0])
-    print(hours_time_to_add)
-    minutes_time_to_add = int(time_to_process[1]) + int(time_to_add[1])
-    print(minutes_time_to_add)
-    seconds_time_to_add = int(time_to_process[2]) + int(time_to_add[2])
-    print(minutes_time_to_add)
-
-    new_datetime = date_time[:11] +  + time_to_process[1] + time_to_process[2] + "Z"
-    return str(new_datetime)
-
-
-def shift(task, token, shift_value):
-    requests.post(
-        "https://api.todoist.com/rest/v1/tasks/" + str(task.id),
-        data=json.dumps({
-            "due_datetime": str(get_processed_datetime(task.due_datetime, shift_value)),
-        }),
-
-        headers={
-            "Content-Type": "application/json",
-            "X-Request-Id": str(uuid.uuid4()),
-            "Authorization": "Bearer %s" % token
-        })
+    for task_item in tasks_for_today:
+        print("\nTask => " + task_item.content)
+        datetime_handler.shift(mainApp.user_data.get("token"), task_item, user_input_shift_value)
 
 
 def sync_data():
-    all_current_projects = todoist_manager.generate_project_data_from_todoist(
+    mainApp.all_current_projects = todoist_manager.generate_project_data_from_todoist(
         mainApp.user_data.get("token"), mainApp.all_current_projects)
 
     if VERBOSE:
         print("All Projects Loaded")
     x = 1
 
-    for project in all_current_projects:
-        all_current_sections = todoist_manager.generate_section_data_from_todoist(
+    for project in mainApp.all_current_projects:
+        mainApp.all_current_sections = todoist_manager.generate_section_data_from_todoist(
             mainApp.user_data.get("token"), project.id, mainApp.all_current_sections)
 
-        all_current_tasks = (todoist_manager.generate_task_data_from_todoist(
+        mainApp.all_current_tasks = (todoist_manager.generate_task_data_from_todoist(
             mainApp.user_data.get("token"), project.id, mainApp.all_current_tasks))
 
         if VERBOSE:
-            print("Loaded Sections and Tasks from Project " + str(x) + " out ot " + str(len(all_current_projects)))
+            print("Loaded Sections and Tasks from Project " + str(x) +
+                  " out ot " + str(len(mainApp.all_current_projects)))
             x += 1
 
 
@@ -113,32 +86,29 @@ def save_data():
 
 # Main program logic follows:
 if __name__ == '__main__':
-
     mainApp = App()
     print('Running Todoist script ...')
-    # if len(sys.argv) < 2:
-    #     print_help_menu()
-    #     exit()
 
-    # if sys.argv[1] == 'sync':
-    #     if sys.argv[2] == '-v':
-    #         VERBOSE == True
-    #     sync_data();
-    # elif sys.argv[1] == 'save':
-    #     save_data();
-    # elif sys.argv[1] == 'shift':
-    #     shift(mainApp.all_current_tasks[0], mainApp.user_data.get("token"), sys.argv[2])
+    if len(sys.argv) < 2:
+        print_help_menu()
+        exit()
 
-    # VERBOSE = True;
+    if sys.argv[1] == 'sync':
+        if sys.argv[2] == '-v':
+            VERBOSE = True
+        sync_data()
+    elif sys.argv[1] == 'save':
+        save_data()
+    elif sys.argv[1] == 'shift':
+        if sys.argv[3] == '-v':
+            VERBOSE = True
+        sync_data()
+        shift(sys.argv[2])
+
+    # VERBOSE = True
     # sync_data()
-    #
-    # tasks_for_today = get_tasks_for_today(mainApp.all_current_tasks)
-
-    # shift(mainApp.all_current_tasks[0], mainApp.user_data.get("token"), "+02:00")
-
-    print(get_processed_datetime("2021-04-11T01:30:00Z", "+02:00"))
-
-    # for task in tasks_for_today:
-    #     print(task.due_datetime)
-
-
+    # task_list = get_tasks_for_today(mainApp.all_current_tasks)
+    # for task in task_list:
+    #     if task.due is not None:
+    #         print("\nTask => " + task.content)
+    #         datetime_handler.get_processed_string(task.due_string, "+1")
