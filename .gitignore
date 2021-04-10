@@ -1,0 +1,6 @@
+.DS_store
+.markdownlint.json
+.idea
+venv/*
+.data/*
+__pycache__/*
