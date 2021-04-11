@@ -1,10 +1,15 @@
 import json
 import os
 
-personal_data_filename = "../.data/api_data.json"
-personal_projects_filename = "../.data/project_data.json"
-personal_sections_filename = "../.data/section_data.json"
-personal_task_filename = "../.data/task_data.json"
+personal_data_filename_from_sm = "../.data/api_data.json"
+personal_projects_filename_from_sm = "../.data/project_data.json"
+personal_sections_filename_from_sm = "../.data/section_data.json"
+personal_task_filename_from_sm = "../.data/task_data.json"
+
+personal_data_filename = ".data/api_data.json"
+personal_projects_filename = ".data/project_data.json"
+personal_sections_filename = ".data/section_data.json"
+personal_task_filename = ".data/task_data.json"
 
 
 class Directory:

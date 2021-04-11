@@ -1,5 +1,6 @@
 from todoist_data_structures import task_object, section_object, project_object
 import requests
+
 VERBOSE = True
 # Data Fetchers
 

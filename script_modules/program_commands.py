@@ -1,6 +1,4 @@
-import todoist_data_fetcher
-import datetime_handler
-import file_handler
+from script_modules import todoist_data_fetcher, datetime_handler, file_handler
 import datetime
 # Program Commands
 
