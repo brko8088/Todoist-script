@@ -1,7 +1,7 @@
-import project_object
-import section_object
-import task_object
+from todoist_data_structures import task_object, section_object, project_object
 import requests
+VERBOSE = True
+# Data Fetchers
 
 
 def get_todoist_projects(token):
