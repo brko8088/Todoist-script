@@ -23,16 +23,13 @@ def print_help_menu():
 
 def turn_argument_into_readable_string(argument):
     argument_list = argument.split("_")
-
     x = 0
     for word in argument_list:
         if x == 0:
             text = word
         else:
             text = text + " " + word
-
         x = x + 1
-
     return text
 
 
