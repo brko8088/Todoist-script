@@ -4,12 +4,22 @@
 
 ## Description
 
-This script aims to connect [Todoist](https://todoist.com/) to a local database of SCRUM files written in Markdown.
-The idea is simple: 
-  1. Write out your personal todo for the day or week, or start an empty Markdown file with the Sprint title.
-  2. The script takes care of synchronizing the work that is in Todoist, and the SCRUM paper, by exchanging tasks with the markdown file. (Markdown Sync)
+This script aims to automate task creation and scheduling for the [Todoist](https://todoist.com/) app. 
 
-However the project has expanded beyond that initial idea.
+## Building
+
+Just make sure you have the libraries listed in the modules. These are:
+- request
+- json
+- todoist-python (although I never used it, You can still acquire it)
+
+## Running
+
+You can run the program from your anywhere in your terminal by adding the following alias to your bash/zsh profile
+
+```alias ptodoist='~/<<<path-to-your-code-repo>>>/.bin.sh'```
+
+The program takes certain arguments to run so in case you are not sure you can run ```ptodoist -h``` to bring up a list of all available commands.
 
 ## Current Capabilities
 
@@ -18,4 +28,8 @@ However the project has expanded beyond that initial idea.
     
 # Future Features
 
-- Generating time-block task for the current sprint so that I can not spent the extra amount of time setting up my Sprint work due. (automating SCRUM workload)
+- Generating time-block task for the current sprint so that I can not spend the extra amount of time setting up my Sprint work due. (automating SCRUM workload)
+- Generate SCRUM documents written in Markdown to be able to: 
+  - Write out your personal todo for the day or week and load these tasks on the current Sprint project.
+  - Import tasks, sections, and projects from Todoist into the Current Scrum document.
+  - Synchronize the work that is in Todoist, and the SCRUM paper. (Markdown Sync)
