@@ -25,10 +25,10 @@ The program takes certain arguments to run so in case you are not sure you can r
 
 - Shifting the due time for the task of the day by however among you want +/-00:00
   - Example: ```shift +02:00``` will move all the task for the day by two hours in case you slept in.
-    
+- Spawn from one to multiple tasks in any project and section, with a due date attach to it.
+
 ## Future Features
 
-- Generating time-block task for the current sprint so that I can not spend the extra amount of time setting up my Sprint work due. (automating SCRUM workload)
 - Generate SCRUM documents written in Markdown to be able to: 
   - Write out your personal todo for the day or week and load these tasks on the current Sprint project.
   - Import tasks, sections, and projects from Todoist into the Current Scrum document.
