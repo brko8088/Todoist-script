@@ -1,4 +1,4 @@
-from script_modules import todoist_data_fetcher, datetime_handler, file_handler
+from script_modules import todoist_data_get, todoist_data_post, datetime_handler, file_handler
 import datetime
 # Program Commands
 
@@ -23,7 +23,7 @@ def shift_command(mainApp, user_input_shift_value):
 
 
 def sync_all_data_command(mainApp):
-    mainApp.all_current_projects = todoist_data_fetcher.generate_project_data_from_todoist(
+    mainApp.all_current_projects = todoist_data_get.generate_project_data_from_todoist(
         mainApp.user_data.get("token"), mainApp.all_current_projects)
 
     if mainApp.VERBOSE:
@@ -31,10 +31,10 @@ def sync_all_data_command(mainApp):
     x = 1
 
     for project in mainApp.all_current_projects:
-        mainApp.all_current_sections = todoist_data_fetcher.generate_section_data_from_todoist(
+        mainApp.all_current_sections = todoist_data_get.generate_section_data_from_todoist(
             mainApp.user_data.get("token"), project.id, mainApp.all_current_sections)
 
-        mainApp.all_current_tasks = (todoist_data_fetcher.generate_task_data_from_todoist(
+        mainApp.all_current_tasks = (todoist_data_get.generate_task_data_from_todoist(
             mainApp.user_data.get("token"), project.id, mainApp.all_current_tasks))
 
         if mainApp.VERBOSE:
@@ -61,3 +61,37 @@ def save_all_data_command(mainApp):
         print("No elements have been synced or loaded...")
     else:
         file_handler.save_data_to_json(file_handler.personal_task_filename, mainApp.all_current_tasks)
+
+
+def create_tasks(mainApp, amount, task_name, project_name, section_name, due_string):
+    token = mainApp.user_data.get("token")
+    project_id = "0"
+    section_id = "0"
+
+    for project in mainApp.all_current_projects:
+        if project.name == project_name:
+            project_id = project.id
+
+    for section in mainApp.all_current_sections:
+        if section.name == section_name and section.project_id == project_id:
+            section_id = section.id
+
+    number_of_existing_tasks = 0
+
+    for task in mainApp.all_current_tasks:
+        if task.section_id == section_id:
+            temp_task_name_list_1 = task.content.split(" ")
+            temp_task_name_list_2 = task_name.split(" ")
+
+            i = 0
+            for frag in temp_task_name_list_2:
+                are_they_the_same = True
+                if frag != temp_task_name_list_1[i]:
+                    are_they_the_same = False
+                i = i + 1
+            if are_they_the_same:
+                number_of_existing_tasks += 1
+
+    for x in range (1 + number_of_existing_tasks, int(amount) + number_of_existing_tasks + 1):
+        todoist_data_post.create_task(token, task_name + " " + str(x), project_id, section_id, due_string)
+        due_string = datetime_handler.get_datetime_in_due_string_format(due_string, "+00:30")

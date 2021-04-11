@@ -63,12 +63,15 @@ if __name__ == '__main__':
         program_commands.shift_command(mainApp, sys.argv[2])
 
     elif sys.argv[1] == 'spawn':
+        program_commands.sync_all_data_command(mainApp)
+        mainApp.VERBOSE = True
         if sys.argv[2] == '-t':
             amount = sys.argv[3]
-            task = turn_argument_into_readable_string(sys.argv[4])
+            task_name = turn_argument_into_readable_string(sys.argv[4])
             project = turn_argument_into_readable_string(sys.argv[5])
             section = turn_argument_into_readable_string(sys.argv[6])
             due_string = turn_argument_into_readable_string(sys.argv[7])
+            program_commands.create_tasks(mainApp, amount, task_name, project, section, due_string)
 
         if sys.argv[2] == '-p':
             project_name = turn_argument_into_readable_string(sys.argv[3])
