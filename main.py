@@ -1,5 +1,4 @@
-from script_modules import datetime_handler, file_handler, todoist_data_fetcher, program_commands
-import datetime
+from script_modules import datetime_handler, file_handler, program_commands
 import json
 import sys
 
@@ -16,8 +15,25 @@ class App:
 
 
 def print_help_menu():
-    print("shift today/tomorrow +/-HH:MM\t\t" +
-          "Moves the schedule for the day by the amount of time given, making it earlier(-) or later(+).")
+    print("shift today/tomorrow +/-HH:MM")
+    print("\t\tMoves the schedule for the day by the amount of time given, making it earlier(-) or later(+).")
+    print("spawn [number] [task_name] [parent_project] [parent_section] [due_string]")
+    print("")
+
+
+def turn_argument_into_readable_string(argument):
+    argument_list = argument.split("_")
+
+    x = 0
+    for word in argument_list:
+        if x == 0:
+            text = word
+        else:
+            text = text + " " + word
+
+        x = x + 1
+
+    return text
 
 
 # Main program logic follows:
@@ -29,22 +45,49 @@ if __name__ == '__main__':
         print_help_menu()
         exit()
 
-    if sys.argv[1] == 'sync':
+    for arg in sys.argv:
+        print(arg)
+
+    if sys.argv[1] == 'help' or sys.argv[1] == '-h':
+        print_help_menu()
+
+    elif sys.argv[1] == 'sync':
         if sys.argv[2] == '-v':
             mainApp.VERBOSE = True
         program_commands.sync_all_data_command(mainApp)
+
     elif sys.argv[1] == 'save':
         program_commands.save_all_data_command(mainApp)
+
     elif sys.argv[1] == 'shift':
         if sys.argv[3] == '-v':
             mainApp.VERBOSE = True
         program_commands.sync_all_data_command(mainApp)
         program_commands.shift_command(mainApp, sys.argv[2])
 
-    mainApp.VERBOSE = True
-    program_commands.sync_all_data_command(mainApp)
-    task_list = program_commands.get_all_tasks_due_today(mainApp.all_current_tasks)
-    for task in task_list:
-        if task.due is not None:
-            print("\nTask => " + task.content)
-            datetime_handler.get_datetime_in_due_string_format(task.due_string, "+1")
+    elif sys.argv[1] == 'spawn':
+        if sys.argv[2] == '-t':
+            amount = sys.argv[3]
+            task = turn_argument_into_readable_string(sys.argv[4])
+            project = turn_argument_into_readable_string(sys.argv[5])
+            section = turn_argument_into_readable_string(sys.argv[6])
+            due_string = turn_argument_into_readable_string(sys.argv[7])
+
+        if sys.argv[2] == '-p':
+            project_name = turn_argument_into_readable_string(sys.argv[3])
+            parent_project = turn_argument_into_readable_string(sys.argv[4])
+
+        if sys.argv[2] == '-s':
+            section_name = turn_argument_into_readable_string(sys.argv[3])
+            parent_project = turn_argument_into_readable_string(sys.argv[4])
+
+    elif sys.argv[1] == 'test_tasks':
+        mainApp.VERBOSE = True
+        program_commands.sync_all_data_command(mainApp)
+        task_list = program_commands.get_all_tasks_due_today(mainApp.all_current_tasks)
+        for task in task_list:
+            if task.due is not None:
+                print("\nTask => " + task.content)
+                datetime_handler.get_datetime_in_due_string_format(task.due_string, "+1")
+
+
