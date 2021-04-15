@@ -51,7 +51,7 @@ if __name__ == '__main__':
     elif sys.argv[1] == 'sync':
         if sys.argv[2] == '-v':
             mainApp.VERBOSE = True
-        program_commands.sync_all_data_command(mainApp)
+        program_commands.load_all_project_data_command(mainApp)
 
     elif sys.argv[1] == 'save':
         program_commands.save_all_data_command(mainApp)
@@ -59,17 +59,19 @@ if __name__ == '__main__':
     elif sys.argv[1] == 'shift':
         if sys.argv[3] == '-v':
             mainApp.VERBOSE = True
-        program_commands.sync_all_data_command(mainApp)
+        program_commands.load_all_project_data_command(mainApp)
         program_commands.shift_command(mainApp, sys.argv[2])
 
     elif sys.argv[1] == 'spawn':
-        program_commands.sync_all_data_command(mainApp)
+        program_commands.load_all_project_data_command(mainApp)
         mainApp.VERBOSE = True
         if sys.argv[2] == '-t':
             amount = sys.argv[3]
-            task_name = turn_argument_into_readable_string(sys.argv[4])
             project = turn_argument_into_readable_string(sys.argv[5])
+            program_commands.load_all_sections_from_project(mainApp, project)
             section = turn_argument_into_readable_string(sys.argv[6])
+            program_commands.load_all_tasks_from_section(mainApp, section)
+            task_name = turn_argument_into_readable_string(sys.argv[4])
             due_string = turn_argument_into_readable_string(sys.argv[7])
             program_commands.create_tasks(mainApp, amount, task_name, project, section, due_string)
 
@@ -83,7 +85,7 @@ if __name__ == '__main__':
 
     elif sys.argv[1] == 'test_tasks':
         mainApp.VERBOSE = True
-        program_commands.sync_all_data_command(mainApp)
+        program_commands.load_all_project_data_command(mainApp)
         task_list = program_commands.get_all_tasks_due_today(mainApp.all_current_tasks)
         for task in task_list:
             if task.due is not None:

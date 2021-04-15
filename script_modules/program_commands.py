@@ -22,25 +22,13 @@ def shift_command(mainApp, user_input_shift_value):
         datetime_handler.shift_schedule(mainApp.user_data.get("token"), task_item, user_input_shift_value)
 
 
-def sync_all_data_command(mainApp):
+def load_all_project_data_command(mainApp):
     mainApp.all_current_projects = todoist_data_get.generate_project_data_from_todoist(
         mainApp.user_data.get("token"), mainApp.all_current_projects)
 
     if mainApp.VERBOSE:
         print("All Projects Loaded")
-    x = 1
 
-    for project in mainApp.all_current_projects:
-        mainApp.all_current_sections = todoist_data_get.generate_section_data_from_todoist(
-            mainApp.user_data.get("token"), project.id, mainApp.all_current_sections)
-
-        mainApp.all_current_tasks = (todoist_data_get.generate_task_data_from_todoist(
-            mainApp.user_data.get("token"), project.id, mainApp.all_current_tasks))
-
-        if mainApp.VERBOSE:
-            print("Loaded Sections and Tasks from Project " + str(x) +
-                  " out ot " + str(len(mainApp.all_current_projects)))
-            x += 1
 
 
 def save_all_data_command(mainApp):
@@ -95,3 +83,23 @@ def create_tasks(mainApp, amount, task_name, project_name, section_name, due_str
     for x in range (1 + number_of_existing_tasks, int(amount) + number_of_existing_tasks + 1):
         todoist_data_post.create_task(token, task_name + " " + str(x), project_id, section_id, due_string)
         due_string = datetime_handler.get_datetime_in_due_string_format(due_string, "+00:30")
+
+
+def load_all_sections_from_project(mainApp, project_name):
+    for project_iterator in mainApp.all_current_projects:
+        if project_iterator.name == project_name:
+            mainApp.all_current_sections = todoist_data_get.generate_section_data_from_todoist(
+                mainApp.user_data.get("token"), project_iterator.id, mainApp.all_current_sections)
+
+    if mainApp.VERBOSE:
+        print("Loaded all sections from Project " + str(project_name))
+
+
+def load_all_tasks_from_section(mainApp, section_name):
+    for section_iterator in mainApp.all_current_sections:
+        if section_iterator.name == section_name:
+            mainApp.all_current_tasks = (todoist_data_get.generate_task_data_from_todoist(
+                mainApp.user_data.get("token"), section_iterator.id, mainApp.all_current_tasks))
+
+    if mainApp.VERBOSE:
+        print("Loaded all tasks from Section " + str(section_name))
