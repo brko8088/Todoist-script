@@ -1,7 +1,5 @@
-from todoist_libraries import datetime_handler, file_handler, program_commands
-import json
-import sys
-
+from libs import datetime_handler, file_handler, program_commands
+import json, sys, argparse
 
 class App:
     def __init__(self):
@@ -35,8 +33,13 @@ def turn_argument_into_readable_string(argument):
 
 # Main program logic follows:
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Process arguments')
+    args = parser.parse_args()
+    print('Welcome to Todoist API CLI...')
+
+    
+
     mainApp = App()
-    print('Running Todoist script ...')
 
     if len(sys.argv) < 2:
         print_help_menu()
