@@ -1,4 +1,4 @@
-from script_modules import datetime_handler, file_handler, program_commands
+from todoist_libraries import datetime_handler, file_handler, program_commands
 import json
 import sys
 

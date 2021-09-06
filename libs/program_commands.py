@@ -1,4 +1,4 @@
-from script_modules import todoist_data_get, todoist_data_post, datetime_handler, file_handler
+from libs import todoist_data_get, todoist_data_post, datetime_handler, file_handler
 import datetime
 # Program Commands
 

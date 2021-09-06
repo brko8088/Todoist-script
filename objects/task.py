@@ -18,3 +18,13 @@ class Task:
             self.due_datetime = self.due.get("datetime")
             self.due_string = self.due.get("string")
             self.due_timezone = self.due.get("timezone")
+
+        
+
+    def generate_task_data_from_todoist(token, project_Id, task_data):
+        raw_tasks_data = get_project_tasks(token, project_Id)
+
+        for task_Object in raw_tasks_data:
+            task_data.append(task_object.Task(task_Object))
+
+        return task_data
