@@ -13,8 +13,24 @@ class Project:
         self.parent = todoist_project.get("parent")
         self.parent_id = todoist_project.get("parent_id")
 
+    def to_string(self):
+        print("ID ============> " + str(self.id))
+        print("Color =========> " + str(self.color))
+        print("Name ==========> " + str(self.name))
+        print("Comment Count => " + str(self.comment_count))
+        print("Shared ========> " + str(self.shared))
+        print("Favorite ======> " + str(self.favorite))
+        print("Sync Id =======> " + str(self.sync_id))
+        print("Url ===========> " + str(self.url))
+        print("Order =========> " + str(self.order))
+        print("Inbox Project => " + str(self.inbox_project))
+        print("Parent ========> " + str(self.parent))
+        print("Parent Id =====> " + str(self.parent_id))
+
+
     def load_request_in_memory(self, project_data):
         for project_Object in project_data:
             project_data.append(Project(project_Object))
 
         return project_data
+    
